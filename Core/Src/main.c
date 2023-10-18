@@ -57,7 +57,14 @@ uint8_t Uart1_Rx_Cnt = 0;    //
 char USART3_RX_BUF[USART3_MAX_RECV_LEN];
 uint8_t Uart2_aRxBuffer;
 
-#define lenth 15
+#define lenth 16
+
+#define  R_NUM               8     //接收缓冲区个数
+#define  RBUFF_UNIT          300   //接收缓冲区长度
+unsigned char  MQTT_RxDataBuf[R_NUM][RBUFF_UNIT];           //数据的接收缓冲区,所有服务器发来的数据，存放在该缓冲区,缓冲区第一个字节存放数据长度
+unsigned char *MQTT_RxDataInPtr;                            //指向接收缓冲区存放数据的位置
+unsigned char *MQTT_RxDataOutPtr;                           //指向接收缓冲区读取数据的位置
+unsigned char *MQTT_RxDataEndPtr;                           //指向接收缓冲区结束的位置
 
 char fina_data1[5];
 char fina_data2[5];
@@ -126,56 +133,56 @@ int main(void)
         /* USER CODE BEGIN 3 */
         // printf("a\r\n");
         // HAL_Delay(1000);
-        if (USART3_RX_BUF[14] == 0x0A) {
-            for (size_t i = 0; i < seri_count; i++) {
-                /* code */
-                // printf("%x ", USART3_RX_BUF[i]);
-                // HAL_UART_Transmit(&huart1, (uint8_t *)&USART3_RX_BUF[i], 1, 0xFFFF);
-                // HAL_UART_Transmit(&huart1, (uint8_t *)"step3\r\n", 8, 0xFFFF);
-                switch (USART3_RX_BUF[i]) {
-                    case 0x6D:
-                        check_flag = i;
-                        // u1_printf("0x6D在第%d???", check_flag);
-                        // HAL_UART_Transmit(&huart1, (uint8_t *)check_flag, 1, 0xFFFF);
-                        break;
-                    case 0x23:
-                        end_flag = i;
-                        // u1_printf("0x0D在第%d???", end_flag);
-                        // HAL_UART_Transmit(&huart1, (uint8_t *)end_flag, 1, 0xFFFF);
-                        break;
-                    default:
-                        break;
-                }
-            }
+        // if (USART3_RX_BUF[14] == 0x0A) {
+        //     for (size_t i = 0; i < seri_count; i++) {
+        //         /* code */
+        //         // printf("%x ", USART3_RX_BUF[i]);
+        //         // HAL_UART_Transmit(&huart1, (uint8_t *)&USART3_RX_BUF[i], 1, 0xFFFF);
+        //         // HAL_UART_Transmit(&huart1, (uint8_t *)"step3\r\n", 8, 0xFFFF);
+        //         switch (USART3_RX_BUF[i]) {
+        //             case 0x6D:
+        //                 check_flag = i;
+        //                 // u1_printf("0x6D在第%d???", check_flag);
+        //                 // HAL_UART_Transmit(&huart1, (uint8_t *)check_flag, 1, 0xFFFF);
+        //                 break;
+        //             case 0x23:
+        //                 end_flag = i;
+        //                 // u1_printf("0x0D在第%d???", end_flag);
+        //                 // HAL_UART_Transmit(&huart1, (uint8_t *)end_flag, 1, 0xFFFF);
+        //                 break;
+        //             default:
+        //                 break;
+        //         }
+        //     }
 
-            for (size_t i = 2; i < check_flag; i++) {
+        //     for (size_t i = 2; i < check_flag; i++) {
 
-                if (USART3_RX_BUF[i] == 0x2E) {
-                    continue;
-                }
-                fina_data1[j++] = USART3_RX_BUF[i];
-            }
-            for (size_t a = check_flag + 1; a < end_flag; a++) {
+        //         if (USART3_RX_BUF[i] == 0x2E) {
+        //             continue;
+        //         }
+        //         fina_data1[j++] = USART3_RX_BUF[i];
+        //     }
+        //     for (size_t a = check_flag + 1; a < end_flag; a++) {
 
-                if (USART3_RX_BUF[a] == 0x2C) {
-                    continue;
-                }
-                fina_data2[k++] = USART3_RX_BUF[a];
-            }
+        //         if (USART3_RX_BUF[a] == 0x2C) {
+        //             continue;
+        //         }
+        //         fina_data2[k++] = USART3_RX_BUF[a];
+        //     }
 
-            sscanf(fina_data1, "%d", &finaldata1); // 字符串转int
-            sscanf(fina_data2, "%d", &finaldata2); // 字符串转int
+        //     sscanf(fina_data1, "%d", &finaldata1); // 字符串转int
+        //     sscanf(fina_data2, "%d", &finaldata2); // 字符串转int
 
-            printf("距离=%dmm,回光=%d\r\n", finaldata1, finaldata2); // print用串???2，串???1用来和激光模块???讯
-            for (x = 0; x < j; x++) {
-                fina_data1[x] = 0;
-                fina_data2[x] = 0;
-            }
-            // uflag      = 0;
-            seri_count = 0;
-            j          = 0;
-            k          = 0;
-        }
+        //     printf("距离=%dmm,回光=%d\r\n", finaldata1, finaldata2); // print用串???2，串???1用来和激光模块???讯
+        //     for (x = 0; x < j; x++) {
+        //         fina_data1[x] = 0;
+        //         fina_data2[x] = 0;
+        //     }
+        //     // uflag      = 0;
+        //     seri_count = 0;
+        //     j          = 0;
+        //     k          = 0;
+        // }
     }
 
     /* USER CODE END 3 */
@@ -351,7 +358,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
             /* code */
             printf("%x ", USART3_RX_BUF[i]);
         }
-
+        memcpy(&MQTT_RxDataInPtr[0], USART3_RX_BUF, lenth);
         HAL_UART_Receive_DMA(&huart2, (uint8_t *)USART3_RX_BUF, lenth);
     }
 }
