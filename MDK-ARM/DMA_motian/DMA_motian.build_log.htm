@@ -1,0 +1,89 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.14.0.0
+Copyright (C) 2015 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 Administrator, 2, LIC=R4HV2-9C1F9-24ESS-LQPQE-NF080-Y2INW
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.14.0.0
+Toolchain Path:  F:\MDK\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.05 update 1 (build 106)
+Assembler:       Armasm.exe V5.05 update 1 (build 106)
+Linker/Locator:  ArmLink.exe V5.05 update 1 (build 106)
+Library Manager: ArmAr.exe V5.05 update 1 (build 106)
+Hex Converter:   FromElf.exe V5.05 update 1 (build 106)
+CPU DLL:         SARMCM3.DLL V5.14.0.0
+Dialog DLL:      DCM.DLL V1.13.1.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.14.0_KEIL
+Dialog DLL:      TCM.DLL V1.14.4.0
+ 
+<h2>Project:</h2>
+F:\ARM\DMA_motian\MDK-ARM\DMA_motian.uvprojx
+Project File Date:  10/17/2023
+
+<h2>Output:</h2>
+Rebuild target 'DMA_motian'
+assembling startup_stm32f103xb.s...
+compiling main.c...
+../Core/Src/main.c(121): warning:  #177-D: variable "seri_count" was declared but never referenced
+      static uint8_t seri_count = 0;
+../Core/Src/main.c(122): warning:  #177-D: variable "check_flag" was declared but never referenced
+      char check_flag, end_flag, j, k = 0;
+../Core/Src/main.c(122): warning:  #177-D: variable "end_flag" was declared but never referenced
+      char check_flag, end_flag, j, k = 0;
+../Core/Src/main.c(122): warning:  #177-D: variable "j" was declared but never referenced
+      char check_flag, end_flag, j, k = 0;
+../Core/Src/main.c(122): warning:  #177-D: variable "k" was declared but never referenced
+      char check_flag, end_flag, j, k = 0;
+../Core/Src/main.c(123): warning:  #177-D: variable "x" was declared but never referenced
+      uint8_t x;
+../Core/Src/main.c: 6 warnings, 0 errors
+compiling gpio.c...
+compiling dma.c...
+compiling tim.c...
+compiling usart.c...
+compiling stm32f1xx_it.c...
+compiling stm32f1xx_hal_msp.c...
+compiling stm32f1xx_hal_gpio_ex.c...
+compiling stm32f1xx_hal_tim.c...
+compiling stm32f1xx_hal_tim_ex.c...
+compiling stm32f1xx_hal.c...
+compiling stm32f1xx_hal_rcc.c...
+compiling stm32f1xx_hal_rcc_ex.c...
+compiling stm32f1xx_hal_gpio.c...
+compiling stm32f1xx_hal_dma.c...
+compiling stm32f1xx_hal_cortex.c...
+compiling stm32f1xx_hal_pwr.c...
+compiling stm32f1xx_hal_flash.c...
+compiling stm32f1xx_hal_flash_ex.c...
+compiling stm32f1xx_hal_exti.c...
+compiling stm32f1xx_hal_uart.c...
+compiling system_stm32f1xx.c...
+linking...
+Program Size: Code=11228 RO-data=364 RW-data=48 ZI-data=2872  
+FromELF: creating hex file...
+"DMA_motian\DMA_motian.axf" - 0 Error(s), 6 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.4.2.0.pack
+                ARM::CMSIS:CORE:3.40.0
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 3.40.0
+
+<h2>Collection of Component include folders:</h2>
+  F:\ARM\DMA_motian\MDK-ARM\RTE
+  F:\MDK\ARM\PACK\ARM\CMSIS\4.2.0\CMSIS\Include
+  F:\MDK\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:3.40.0
+      Source file:   CMSIS\UserCodeTemplates\ARM\ITM_Retarget.c
+</pre>
+</body>
+</html>

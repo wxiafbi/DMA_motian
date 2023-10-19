@@ -59,12 +59,12 @@ uint8_t Uart2_aRxBuffer;
 
 #define lenth      0xF
 
-#define R_NUM      8                             // 接收缓冲区个数
-#define RBUFF_UNIT 300                           // 接收缓冲区长度
-unsigned char MQTT_RxDataBuf[R_NUM][RBUFF_UNIT]; // 数据的接收缓冲区,所有服务器发来的数据，存放在该缓冲区,缓冲区第一个字节存放数据长度
-unsigned char *MQTT_RxDataInPtr;                 // 指向接收缓冲区存放数据的位置
-unsigned char *MQTT_RxDataOutPtr;                // 指向接收缓冲区读取数据的位置
-unsigned char *MQTT_RxDataEndPtr;                // 指向接收缓冲区结束的位置
+#define R_NUM      20                        // 接收缓冲区个数
+#define RBUFF_UNIT 300                      // 接收缓冲区长度
+unsigned char MQTT_RxDataBuf[R_NUM][lenth]; // 数据的接收缓冲区,所有服务器发来的数据，存放在该缓冲区,缓冲区第一个字节存放数据长度
+unsigned char *MQTT_RxDataInPtr;            // 指向接收缓冲区存放数据的位置
+unsigned char *MQTT_RxDataOutPtr;           // 指向接收缓冲区读取数据的位置
+unsigned char *MQTT_RxDataEndPtr;           // 指向接收缓冲区结束的位置
 
 char fina_data1[5];
 char fina_data2[5];
@@ -117,19 +117,22 @@ int main(void)
     MX_USART2_UART_Init();
     /* USER CODE BEGIN 2 */
     HAL_TIM_Base_Start_IT(&htim2);
-    HAL_UART_Receive_DMA(&huart2, (uint8_t *)USART3_RX_BUF, lenth);
 
     static uint8_t seri_count = 0;
     char check_flag, end_flag, j, k = 0;
     uint8_t x;
-    
+
     HAL_Delay(200);
 
     MQTT_RxDataInPtr  = MQTT_RxDataBuf[0];         // 指向发送缓冲区存放数据的指针归位
     MQTT_RxDataOutPtr = MQTT_RxDataInPtr;          // 指向发送缓冲区读取数据的指针归位
     MQTT_RxDataEndPtr = MQTT_RxDataBuf[R_NUM - 1]; // 指向发送缓冲区结束的指针归位
-    MQTT_RxDataInPtr  = MQTT_RxDataBuf[0];         // 指向发送缓冲区存放数据的指针归位
-    printf("I n=0x%x", MQTT_RxDataInPtr);
+
+    printf("I-n=0x%x", MQTT_RxDataInPtr);
+
+    HAL_UART_Transmit_DMA(&huart2, (uint8_t *)"iACM", 3);
+    HAL_Delay(200);
+    HAL_UART_Receive_DMA(&huart2, (uint8_t *)USART3_RX_BUF, lenth);
     // static uint8_t uflag = 0;
     /* USER CODE END 2 */
 
@@ -139,22 +142,22 @@ int main(void)
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
-        HAL_Delay(200);
+        printf("I n=0x%x\r\n", MQTT_RxDataInPtr);
+        printf("Out=0x%x\r\n", MQTT_RxDataOutPtr);
         if (MQTT_RxDataInPtr != MQTT_RxDataOutPtr) {
             /* code */
             printf("数据解析\r\n");
+
+            MQTT_RxDataOutPtr += lenth; // 接收指针下移
+            
+            for (size_t i = 0; i < lenth; i++) {
+                /* code */
+                printf("%x ", MQTT_RxDataOutPtr[i]);
+            }
+
+            if (MQTT_RxDataOutPtr == MQTT_RxDataEndPtr) // 如果接收指针到接收缓冲区尾部了
+                MQTT_RxDataOutPtr = MQTT_RxDataBuf[0];  // 接收指针归位到接收缓冲区开头
         }
-        MQTT_RxDataOutPtr += lenth;                 // 接收指针下移
-        printf("Out=0x%x\r\n", MQTT_RxDataOutPtr);
-        for (size_t i = 0; i < lenth; i++)
-        {
-            /* code */
-            printf("%x ", MQTT_RxDataOutPtr[i]);
-        }
-        
-        
-        if (MQTT_RxDataOutPtr == MQTT_RxDataEndPtr) // 如果接收指针到接收缓冲区尾部了
-            MQTT_RxDataOutPtr = MQTT_RxDataBuf[0];  // 接收指针归位到接收缓冲区开头
     }
     /* USER CODE END 3 */
 }
@@ -229,7 +232,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
             SystemTimer = 0;
             // OpenTimer   = 0;
         }
-        HAL_UART_Transmit_DMA(&huart2, (uint8_t *)"iSM", 3);
+        // HAL_UART_Transmit_DMA(&huart2, (uint8_t *)"iSM", 3);
     }
 }
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
@@ -329,9 +332,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
             /* code */
             printf("%c", USART3_RX_BUF[i]);
         }
-        memcpy(&MQTT_RxDataInPtr[0], USART3_RX_BUF, lenth);
+        memcpy(MQTT_RxDataInPtr, USART3_RX_BUF, lenth);
         MQTT_RxDataInPtr += lenth; // 指针下移
-        printf("I n=0x%x\r\n", MQTT_RxDataInPtr);
+        
         if (MQTT_RxDataInPtr == MQTT_RxDataEndPtr) // 如果指针到缓冲区尾部了
             MQTT_RxDataInPtr = MQTT_RxDataBuf[0];  // 指针归位到缓冲区开头                                                 // 串口3接收数据量变量清零
         HAL_UART_Receive_DMA(&huart2, (uint8_t *)USART3_RX_BUF, lenth);

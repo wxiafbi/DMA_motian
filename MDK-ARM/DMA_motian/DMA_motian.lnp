@@ -1,0 +1,28 @@
+--cpu Cortex-M3
+"dma_motian\startup_stm32f103xb.o"
+"dma_motian\main.o"
+"dma_motian\gpio.o"
+"dma_motian\dma.o"
+"dma_motian\tim.o"
+"dma_motian\usart.o"
+"dma_motian\stm32f1xx_it.o"
+"dma_motian\stm32f1xx_hal_msp.o"
+"dma_motian\stm32f1xx_hal_gpio_ex.o"
+"dma_motian\stm32f1xx_hal_tim.o"
+"dma_motian\stm32f1xx_hal_tim_ex.o"
+"dma_motian\stm32f1xx_hal.o"
+"dma_motian\stm32f1xx_hal_rcc.o"
+"dma_motian\stm32f1xx_hal_rcc_ex.o"
+"dma_motian\stm32f1xx_hal_gpio.o"
+"dma_motian\stm32f1xx_hal_dma.o"
+"dma_motian\stm32f1xx_hal_cortex.o"
+"dma_motian\stm32f1xx_hal_pwr.o"
+"dma_motian\stm32f1xx_hal_flash.o"
+"dma_motian\stm32f1xx_hal_flash_ex.o"
+"dma_motian\stm32f1xx_hal_exti.o"
+"dma_motian\stm32f1xx_hal_uart.o"
+"dma_motian\system_stm32f1xx.o"
+--strict --scatter "DMA_motian\DMA_motian.sct"
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "DMA_motian.map" -o DMA_motian\DMA_motian.axf
